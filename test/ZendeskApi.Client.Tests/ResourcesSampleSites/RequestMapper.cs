@@ -69,13 +69,20 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
         {
             var ticket = destination.Ticket;
             if (source.Subject != null) ticket.Subject = source.Subject;
+            if (source.RequesterId.HasValue) ticket.RequesterId = source.RequesterId;
             if (source.AssigneeId.HasValue) ticket.AssigneeId = source.AssigneeId;
             if (source.GroupId.HasValue) ticket.GroupId = source.GroupId;
+            if (source.OrganisationId.HasValue) ticket.OrganisationId = source.OrganisationId;
+            if (source.CollaboratorIds != null) ticket.CollaboratorIds = source.CollaboratorIds.ToList();
             if (source.Type.HasValue) ticket.Type = source.Type;
             if (source.Priority.HasValue) ticket.Priority = source.Priority;
             if (source.Status.HasValue) ticket.Status = source.Status.Value;
             if (source.Tags != null) ticket.Tags = source.Tags.ToList();
             if (source.ExternalId != null) ticket.ExternalId = source.ExternalId;
+            if (source.ProblemId.HasValue) ticket.ProblemId = source.ProblemId;
+            if (source.Due.HasValue) ticket.Due = source.Due;
+            if (source.FormId.HasValue) ticket.FormId = source.FormId;
+            if (source.BrandId.HasValue) ticket.BrandId = source.BrandId;
         }
     }
 }
