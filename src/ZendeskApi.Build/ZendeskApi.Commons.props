@@ -4,11 +4,11 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DebugType>portable</DebugType>
 
-        <Authors>Just Eat</Authors>
-        <Company>Just Eat</Company>
+        <Authors>Just Eat Takeaway</Authors>
+        <Company>Just Eat Takeaway</Company>
         <Copyright>Copyright (c) Just Eat 2015-$([System.DateTime]::Now.ToString(yyyy))</Copyright>
         <PackageIcon>icon.png</PackageIcon>
-        <PackageProjectUrl>https://github.com/justeat/ZendeskApiClient</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/justeattakeaway/ZendeskApiClient</PackageProjectUrl>
         <PackageLicenseFile>License.md</PackageLicenseFile>
         <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -23,7 +23,7 @@
     <PropertyGroup>
         <Major>7</Major>
         <Minor>0</Minor>
-        <Revision>9</Revision>
+        <Revision>8</Revision>
         <PackageVersion>$(Major).$(Minor).$(Revision)</PackageVersion>
     </PropertyGroup>
     <ItemGroup>
