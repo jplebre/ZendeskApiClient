@@ -105,6 +105,21 @@ namespace ZendeskApi.Client.Tests.Resources
             await Assert.ThrowsAsync<ZendeskRequestException>(async () => await _resource.DeleteAttachmentAsync(int.MinValue));
         }
 
+        [Fact]
+        public async Task RedactAttachmentAsync_WhenCalled_ShouldReturnAttachment()
+        {
+            var attachment = await _resource.RedactAttachmentAsync(1, 2, 3);
+
+            Assert.NotNull(attachment);
+            Assert.Equal(3, attachment.Id);
+        }
+
+        [Fact]
+        public async Task RedactAttachmentAsync_WhenUnexpectedHttpCode_ShouldThrow()
+        {
+            await Assert.ThrowsAsync<ZendeskRequestException>(async () => await _resource.RedactAttachmentAsync(int.MinValue, 2, 3));
+        }
+
         public void Dispose()
         {
             ((IDisposable)_client).Dispose();
