@@ -94,7 +94,7 @@ namespace ZendeskApi.Client.Resources
             var response = await UpdateAsync(
                     $"api/v2/tickets/{ticketId}/comments/{commentId}/attachments/{attachmentId}/redact",
                     "redact-comment-attachment",
-                    $"RedactAsync({ticketId}, {commentId}, {attachmentId})",
+                    $"RedactAttachmentAsync({ticketId}, {commentId}, {attachmentId})",
                     cancellationToken)
                 .ReadContentAsAsync<AttachmentResponse>();
 
