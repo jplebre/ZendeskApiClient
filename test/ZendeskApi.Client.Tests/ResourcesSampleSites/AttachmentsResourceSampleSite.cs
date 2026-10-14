@@ -82,6 +82,28 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
                             }
                         });
                     })
+                    .MapPut("api/v2/tickets/{ticketId}/comments/{commentId}/attachments/{attachmentId}/redact", async (req, resp, routeData) =>
+                    {
+                        var ticketId = long.Parse(routeData.Values["ticketId"].ToString());
+
+                        if (ticketId == int.MinValue)
+                        {
+                            resp.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                            return;
+                        }
+
+                        resp.StatusCode = (int)HttpStatusCode.OK;
+
+                        await resp.WriteAsJson(new AttachmentResponse
+                        {
+                            Attachment = new Attachment
+                            {
+                                Id = long.Parse(routeData.Values["attachmentId"].ToString()),
+                                FileName = "redacted.txt",
+                                ContentType = "text/plain"
+                            }
+                        });
+                    })
                     .MapDelete("api/v2/uploads/{id}", (req, resp, routeData) =>
                     {
                         return RequestHelper.Delete<Attachment>(

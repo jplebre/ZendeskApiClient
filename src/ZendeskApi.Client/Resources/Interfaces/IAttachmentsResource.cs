@@ -27,5 +27,11 @@ namespace ZendeskApi.Client.Resources
         Task DeleteAttachmentAsync(
             long attachmentId,
             CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<Attachment> RedactAttachmentAsync(
+            long ticketId,
+            long commentId,
+            long attachmentId,
+            CancellationToken cancellationToken = default(CancellationToken));
     }
 }

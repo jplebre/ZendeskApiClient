@@ -13,7 +13,7 @@ namespace ZendeskApi.Client.Resources
     /// <summary>
     /// <see cref="https://developer.zendesk.com/rest_api/docs/core/attachments"/>
     /// </summary>
-    public class AttachmentsResource : AbstractBaseResource<AttachmentsResource>, 
+    public class AttachmentsResource : AbstractBaseResource<AttachmentsResource>,
         IAttachmentsResource
     {
         private const string AttachmentsResourceUri = "api/v2/attachments";
@@ -37,18 +37,18 @@ namespace ZendeskApi.Client.Resources
         }
 
         public async Task<Upload> UploadAsync(
-            string fileName, 
-            Stream inputStream, 
+            string fileName,
+            Stream inputStream,
             string token = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var attachmentResponse = await ExecuteRequest(async (client, canToken) => 
+            var attachmentResponse = await ExecuteRequest(async (client, canToken) =>
                     await client.PostAsBinaryAsync(
                         UploadsResourceUri + $"?filename={fileName}&token={token}",
                         inputStream,
                         fileName,
                         canToken)
-                    .ConfigureAwait(false), 
+                    .ConfigureAwait(false),
                     "UploadAsync",
                     cancellationToken)
                 .ThrowIfUnsuccessful("attachments#upload-files", HttpStatusCode.Created)
@@ -83,6 +83,22 @@ namespace ZendeskApi.Client.Resources
                 $"{AttachmentsResourceUri}/{attachmentId}",
                 "delete-attachment",
                 cancellationToken: cancellationToken);
+        }
+
+        public async Task<Attachment> RedactAttachmentAsync(
+            long ticketId,
+            long commentId,
+            long attachmentId,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var response = await UpdateAsync(
+                    $"api/v2/tickets/{ticketId}/comments/{commentId}/attachments/{attachmentId}/redact",
+                    "redact-comment-attachment",
+                    $"RedactAttachmentAsync({ticketId}, {commentId}, {attachmentId})",
+                    cancellationToken)
+                .ReadContentAsAsync<AttachmentResponse>();
+
+            return response?.Attachment;
         }
     }
 }
