@@ -59,14 +59,14 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
                     .MapPost("api/v2/organization_fields", async (req, resp, routeData) =>
                     {
                         var request = await req.ReadAsync<OrganizationFieldCreateUpdateRequest>();
-                        var field = request.OrganizationField;
+                        var organizationField = request.OrganizationField;
 
                         await RequestHelper.Create(
                             req,
                             resp,
                             routeData,
                             item => item.Id,
-                            field,
+                            organizationField,
                             item => new OrganizationFieldResponse
                             {
                                 OrganizationField = item
