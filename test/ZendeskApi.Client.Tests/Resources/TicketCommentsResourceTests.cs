@@ -114,5 +114,21 @@ namespace ZendeskApi.Client.Tests.Resources
         {
             await Assert.ThrowsAsync<ZendeskRequestException>(async () => await _resource.GetAllAsync(int.MinValue));
         }
+
+        [Fact]
+        public async Task RedactCommentAsync_WhenCalled_ShouldNotThrow()
+        {
+            await _resource.RedactCommentAsync(
+                1,
+                2,
+                "<p>My <redact>secret</redact></p>",
+                new[] { "https://company.zendesk.com/attachments/token/abc/?name=file.txt" });
+        }
+
+        [Fact]
+        public async Task RedactCommentAsync_WhenUnexpectedHttpCode_ShouldThrow()
+        {
+            await Assert.ThrowsAsync<ZendeskRequestException>(async () => await _resource.RedactCommentAsync(int.MinValue, 2, "<redact>x</redact>"));
+        }
     }
 }
