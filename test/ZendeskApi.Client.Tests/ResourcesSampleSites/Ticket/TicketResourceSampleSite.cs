@@ -110,6 +110,24 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
 
                         return resp.WriteAsJson(new TicketCommentsResponse { Comments = comments });
                     })
+                    .MapPut("api/v2/comment_redactions/{commentId}", async (req, resp, routeData) =>
+                    {
+                        var request = await req.ReadAsync<CommentRedactionRequest>();
+
+                        if (request.TicketId == int.MinValue)
+                        {
+                            resp.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                            return;
+                        }
+
+                        if (request.TicketId == 0 || string.IsNullOrEmpty(request.HtmlBody) || routeData.Values["commentId"] == null)
+                        {
+                            resp.StatusCode = (int)HttpStatusCode.BadRequest;
+                            return;
+                        }
+
+                        resp.StatusCode = (int)HttpStatusCode.OK;
+                    })
                     .MapGet("api/v2/users/{id}/tickets/assigned", (req, resp, routeData) =>
                     {
                         return RequestHelper.FilteredList<TicketsListResponse, Ticket, TicketResourceState>(

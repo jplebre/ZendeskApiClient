@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -75,6 +76,26 @@ namespace ZendeskApi.Client.Resources
             await _ticketsResource
                 .UpdateAsync(ticket, cancellationToken)
                 .ConfigureAwait(false);
+        }
+
+        public async Task RedactCommentAsync(
+            long ticketId,
+            long commentId,
+            string htmlBody = null,
+            IEnumerable<string> externalAttachmentUrls = null,
+            CancellationToken cancellationToken = default)
+        {
+            // The endpoint returns no body, so the response type is unused
+            await UpdateAsync<object, CommentRedactionRequest>(
+                $"api/v2/comment_redactions/{commentId}",
+                new CommentRedactionRequest(ticketId)
+                {
+                    HtmlBody = htmlBody,
+                    ExternalAttachmentUrls = externalAttachmentUrls
+                },
+                "redact-ticket-comment-in-agent-workspace",
+                $"RedactCommentAsync({ticketId}, {commentId})",
+                cancellationToken);
         }
     }
 }
