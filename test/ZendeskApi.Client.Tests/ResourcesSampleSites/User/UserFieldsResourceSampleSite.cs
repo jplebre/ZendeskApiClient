@@ -60,14 +60,14 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
                     .MapPost("api/v2/user_fields", async (req, resp, routeData) =>
                     {
                         var request = await req.ReadAsync<UserFieldCreateUpdateRequest>();
-                        var field = request.UserField;
+                        var userField = request.UserField;
 
                         await RequestHelper.Create(
                             req,
                             resp,
                             routeData,
                             item => item.Id,
-                            field,
+                            userField,
                             item => new UserFieldResponse
                             {
                                 UserField = item

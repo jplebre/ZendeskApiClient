@@ -57,7 +57,7 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
 
                         resp.StatusCode = (int)HttpStatusCode.Created;
 
-                        resp.Headers.Add("Location", "https://localhost/api/v2/attachments/498483");
+                        resp.Headers["Location"] = "https://localhost/api/v2/attachments/498483";
 
                         var state = req
                             .HttpContext

@@ -11,5 +11,7 @@ public enum Status
     [EnumMember(Value = "inoperative")]
     Inoperative,
     [EnumMember(Value = "investigating")]
-    Investigating
+    Investigating,
+    [EnumMember(Value = "identified")]
+    Identified
 }

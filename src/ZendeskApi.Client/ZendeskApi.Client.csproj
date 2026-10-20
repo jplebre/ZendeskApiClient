@@ -3,7 +3,7 @@
   <Import Project=".\..\ZendeskApi.Build\ZendeskApi.Commons.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
     <Description>A Zendesk Api Client for use with the ZendeskApi v2</Description>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -13,8 +13,6 @@
     <PackageReference Include="Microsoft.Extensions.Options" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="System.Reflection" />
-    <PackageReference Include="System.Reflection.Extensions" />
   </ItemGroup>
 
 </Project>

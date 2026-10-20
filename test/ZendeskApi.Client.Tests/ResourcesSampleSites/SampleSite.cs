@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace ZendeskApi.Client.Tests.ResourcesSampleSites
 {
@@ -25,7 +26,7 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
         protected SampleSite(
             string resource,
             Action<IRouteBuilder> matchesRequest,
-            Action<WebHostBuilder> webHostBuilderSettings = null,
+            Action<IWebHostBuilder> webHostBuilderSettings = null,
             Action<State<TValue>> populateState = null)
             : base(resource, matchesRequest, webHostBuilderSettings, populateState)
         { }
@@ -38,7 +39,7 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
         protected SampleSite(
             string resource, 
             Action<IRouteBuilder> matchesRequest,
-            Action<WebHostBuilder> webHostBuilderSettings = null, 
+            Action<IWebHostBuilder> webHostBuilderSettings = null, 
             Action<TState> populateState = null) 
             : base(resource, matchesRequest, webHostBuilderSettings, populateState)
         { }
@@ -48,34 +49,41 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
         where TState : State<TKey, TValue>, new()
         where TValue : class
     {
+        private readonly IHost _host;
+
         protected readonly TestServer Server;
 
         protected SampleSite(
             string resource,
             Action<IRouteBuilder> matchesRequest,
-            Action<WebHostBuilder> webHostBuilderSettings = null,
+            Action<IWebHostBuilder> webHostBuilderSettings = null,
             Action<TState> populateState = null)
         {
-            var builder = new WebHostBuilder();
-
             var state = new TState();
 
             populateState?.Invoke(state);
 
-            builder
-                .ConfigureServices(services => {
-                    services.AddSingleton(_ => state);
-                    services.AddRouting();
-                    services.AddMemoryCache();
-                })
-                .Configure(app =>
+            _host = new HostBuilder()
+                .ConfigureWebHost(builder =>
                 {
-                    app.UseRouter(matchesRequest);
-                });
+                    builder
+                        .UseTestServer()
+                        .ConfigureServices(services =>
+                        {
+                            services.AddSingleton(_ => state);
+                            services.AddRouting();
+                            services.AddMemoryCache();
+                        })
+                        .Configure(app =>
+                        {
+                            app.UseRouter(matchesRequest);
+                        });
 
-            webHostBuilderSettings?.Invoke(builder);
+                    webHostBuilderSettings?.Invoke(builder);
+                })
+                .Start();
 
-            Server = new TestServer(builder);
+            Server = _host.GetTestServer();
 
             RefreshClient(resource);
         }
@@ -101,7 +109,7 @@ namespace ZendeskApi.Client.Tests.ResourcesSampleSites
         public virtual void Dispose()
         {
             Client.Dispose();
-            Server.Dispose();
+            _host.Dispose();
         }
     }
 }
